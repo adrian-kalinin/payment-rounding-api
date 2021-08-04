@@ -9,6 +9,7 @@ class PaymentRoundingView(APIView):
         invoice_lines = request.data['invoice_lines']
         categories = separate_categories(invoice_lines)
 
-        bookkeeping_data = generate_bookkeeping_data(request.data['payments'], categories)
+        payments = request.data['payments']
+        bookkeeping_data = generate_bookkeeping_data(payments, categories)
 
         return Response(bookkeeping_data)
