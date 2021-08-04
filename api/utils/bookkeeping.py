@@ -44,6 +44,4 @@ def generate_bookkeeping_data(payments, categories):
 
         payment_data.append(data)
 
-        print([float(d) / 100 for d in distributed.values()], [float(price) / 100 for price in categories.values()])
-
     return payment_data
