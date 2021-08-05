@@ -2,7 +2,7 @@
 
 API for generating bookkeeping data for a payment.
 
-You can try the API at https://payment-rounding.adrian-kalinin.dev/api/
+You can try the API at https://payment-rounding.adrian-kalinin.dev/api/ (backup url is https://payment-rounding-api-5x85t.ondigitalocean.app/api/)
 
 ## How to launch
 
