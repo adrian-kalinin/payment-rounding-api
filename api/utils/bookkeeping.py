@@ -15,7 +15,7 @@ def separate_categories(invoice_lines):
 
 def generate_bookkeeping_data(payments, categories):
     payment_data = []
-    distributed = {category: 0 for category in categories}
+    distributed = {category: 0 for category in categories}  # How much money is distributed to each category
 
     # Iterate over each payment
     for count, payment in enumerate(payments):
@@ -24,11 +24,11 @@ def generate_bookkeeping_data(payments, categories):
         total_price = sum(categories.values())
         available = int(payment['amount'].replace('.', ''))  # Convert decimal euros into integer cents
 
-        # Iterate over each category and distribute money from payment
+        # Iterate over each category and distribute money from the current payment
         for category, price in categories.items():
             distributed_amount = round(price / total_price * available)
 
-            # Check if already distributed amount and current distributed amount are enough for the price
+            # Check if sum already distributed amount and current distributed amount is enough for the price
             if distributed[category] + distributed_amount >= price:
                 distributed_amount = price - distributed[category]
 
