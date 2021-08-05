@@ -16,7 +16,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'payment-rounding.adrian-kalinin.dev']
+ALLOWED_HOSTS = ['127.0.0.1', 'payment-rounding.adrian-kalinin.dev', 'payment-rounding-api-5x85t.ondigitalocean.app']
 
 
 INSTALLED_APPS = [
