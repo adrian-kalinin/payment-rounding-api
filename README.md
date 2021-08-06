@@ -12,5 +12,5 @@ The endpoint accepts only POST requests.
 
 1. Clone the repository (e. g. `git clone https://github.com/adrian-kalinin/payment-rounding-api.git`)
 2. Install requirements (e. g. `pip install requirements.txt`)
-3 In `payment_rounding` package create `.env` file with variables based on `.template.env`. Or simply set all environment variables via terminal, and additianally set `READ_DOT_ENV_FILE` as False
+3. In `payment_rounding` package create `.env` file with variables based on `.template.env`. Or simply set all environment variables via terminal, and additianally set `READ_DOT_ENV_FILE` as False
 4. Run server with `python manage.py runserver`
