@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = env('SECRET_KEY')
 
-DEBUG = env('DEBUG')
+DEBUG = env.bool('DEBUG')
 
 ALLOWED_HOSTS = ['127.0.0.1', 'payment-rounding.adrian-kalinin.dev', 'payment-rounding-api-5x85t.ondigitalocean.app']
 
