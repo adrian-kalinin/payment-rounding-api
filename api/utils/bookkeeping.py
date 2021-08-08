@@ -34,64 +34,61 @@ def prepare_payment_data(payments):
     return payments
 
 
-def _distribute_amounts(available: int, prices: list):
+def _distribute_amounts(available: int, categories: dict, distributed_by_categories: dict):
     """
-    This function distributes total amount into categories in proportion to their prices.
+    This function distributes total amount into categories in proportion to their prices. Integer cents are converted
+    into decimal euros.
 
-    :param available: total amount of payment
-    :param prices: a list of prices
+    :param available: amount of available money from a payment
+    :param categories: a dict of categories with their prices
+    :param distributed_by_categories: a dict of distributed categories
     :return: a list of proportionally distributed amounts
     """
 
-    distributed_amounts = []
-    total_price = sum(prices)
+    data = []
+    total_price = sum(categories.values())
 
-    for price in prices:
+    for category, price in categories.items():
         distributed_amount = round(price / total_price * available)
-        distributed_amounts.append(distributed_amount)
 
+        # Check if sum of already distributed amount and current distributed amount is enough for the price
+        if distributed_by_categories[category] + distributed_amount >= price:
+            distributed_amount = price - distributed_by_categories[category]
+
+        distributed_by_categories[category] += distributed_amount
         total_price -= price
         available -= distributed_amount
 
-    return distributed_amounts
+        data.append({
+            'category': category,
+            'net_amount': f'{distributed_amount / 100:.2f}'
+        })
+
+    return data, distributed_by_categories
 
 
-def generate_bookkeeping_data(payments: dict, categories: dict):
+def generate_bookkeeping_data(payments: list, categories: dict):
     """
-    This function generates bookkeeping data based on categories and payments. Integer cents are converted into
-    decimal euros.
+    This function generates bookkeeping data based on categories and payments.
 
-    :param payments: a dict of payments
-    :param categories: a dict of categories with their prices
+    :param payments: a list of payments
+    :param categories: a dict of categories and their prices
     :return: a dict of bookkeeping data
     """
 
     payment_data = []
-    distributed = {category: 0 for category in categories}  # How much money is distributed to each category
 
-    # Iterate over each payment
-    for count, payment in enumerate(payments):
-        data = {'id': count + 1, 'categorisations': []}
+    # How much money is already distributed to each category
+    distributed_by_categories = {category: 0 for category in categories}
 
-        total_price = sum(categories.values())
-        available = payment['amount']
+    for payment in payments:
+        categorisations, distributed_by_categories = _distribute_amounts(
+            payment['amount'], categories, distributed_by_categories
+        )
 
-        for category, price in categories.items():
-            distributed_amount = round(price / total_price * available)
-
-            # Check if sum already distributed amount and current distributed amount is enough for the price
-            if distributed[category] + distributed_amount >= price:
-                distributed_amount = price - distributed[category]
-
-            distributed[category] += distributed_amount
-            available -= distributed_amount
-            total_price -= price
-
-            data['categorisations'].append({
-                'category': category,
-                'net_amount': f'{distributed_amount / 100:.2f}'
-            })
-
-        payment_data.append(data)
+        payment_data.append({
+            'id': payment['id'],
+            'categorisations': categorisations
+        })
 
     return payment_data
