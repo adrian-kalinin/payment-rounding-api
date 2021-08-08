@@ -51,7 +51,7 @@ def _distribute_amounts(available: int, categories: dict, distributed_by_categor
     for category, price in categories.items():
         distributed_amount = round(price / total_price * available)
 
-        # Check if sum of already distributed amount and current distributed amount is enough for the price
+        # Check if sum of already distributed amount and current distributed amount does not exceeds the price
         if distributed_by_categories[category] + distributed_amount >= price:
             distributed_amount = price - distributed_by_categories[category]
 
@@ -78,7 +78,8 @@ def generate_bookkeeping_data(payments: list, categories: dict):
 
     payment_data = []
 
-    # How much money is already distributed to each category
+    # This dictionary represents how much money is already distributed to each category, it helps us not to pay more
+    # than the original price for the category
     distributed_by_categories = {category: 0 for category in categories}
 
     for payment in payments:
