@@ -34,10 +34,9 @@ def prepare_payment_data(payments):
     return payments
 
 
-def _distribute_amounts(available: int, categories: dict, distributed_by_categories: dict):
+def distribute_amounts(available: int, categories: dict, distributed_by_categories: dict):
     """
-    This function distributes total amount into categories in proportion to their prices. Integer cents are converted
-    into decimal euros.
+    This function distributes total amount into categories in proportion to their prices.
 
     :param available: amount of available money from a payment
     :param categories: a dict of categories with their prices
@@ -61,7 +60,7 @@ def _distribute_amounts(available: int, categories: dict, distributed_by_categor
 
         data.append({
             'category': category,
-            'net_amount': f'{distributed_amount / 100:.2f}'
+            'net_amount': distributed_amount
         })
 
     return data, distributed_by_categories
@@ -69,7 +68,8 @@ def _distribute_amounts(available: int, categories: dict, distributed_by_categor
 
 def generate_bookkeeping_data(payments: list, categories: dict):
     """
-    This function generates bookkeeping data based on categories and payments.
+    This function generates bookkeeping data based on categories and payments. Integer cents are converted
+    into decimal euros.
 
     :param payments: a list of payments
     :param categories: a dict of categories and their prices
@@ -83,13 +83,19 @@ def generate_bookkeeping_data(payments: list, categories: dict):
     distributed_by_categories = {category: 0 for category in categories}
 
     for payment in payments:
-        categorisations, distributed_by_categories = _distribute_amounts(
+        data = {'id': payment['id'], 'categorisations': []}
+
+        categorisations, distributed_by_categories = distribute_amounts(
             payment['amount'], categories, distributed_by_categories
         )
 
-        payment_data.append({
-            'id': payment['id'],
-            'categorisations': categorisations
-        })
+        # Convert integer cents into decimal euros
+        for categorisation in categorisations:
+            data['categorisations'].append({
+                'category': categorisation['category'],
+                'net_amount': f'{categorisation["net_amount"] / 100:.2f}'
+            })
+
+        payment_data.append(data)
 
     return payment_data
