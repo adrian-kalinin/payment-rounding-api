@@ -1,11 +1,16 @@
 # Payment rounding API
 
-API for generating bookkeeping data for a payment.
+...
 
-You can try the API at https://payment-rounding.adrian-kalinin.dev/api/ (backup url is https://payment-rounding-api-5x85t.ondigitalocean.app/api/)
+# Try it out
 
-## How to launch
+API is available at https://payment-rounding.adrian-kalinin.dev/api/ or https://payment-rounding-api-5x85t.ondigitalocean.app/api/
 
-1. Clone the repository (`git clone https://github.com/adrian-kalinin/payment-rounding-api.git`)
-2. Install requirements (`pip install requirements.txt`)
-3. Run server (`python manage.py runserver`)
+The endpoint accepts only POST requests.
+
+# How to launch
+
+1. Clone the repository (e. g. `git clone https://github.com/adrian-kalinin/payment-rounding-api.git`)
+2. Install requirements (e. g. `pip install requirements.txt`)
+3. In `payment_rounding` package create `.env` file with variables based on `.template.env`. Or simply set all environment variables via terminal, and additianally set `READ_DOT_ENV_FILE` as False
+4. Run server with `python manage.py runserver`
